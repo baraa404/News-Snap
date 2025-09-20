@@ -1,0 +1,59 @@
+### Core Flutter & Dart (keep only what's needed to build on Android/iOS)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Build outputs
+build/
+**/generated/
+
+### Android (ignore machine-local and build artifacts only)
+android/.gradle/
+android/captures/
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+android/app/release/
+android/app/debug/
+android/app/profile/
+
+# Keystore and secrets (do not commit private keys)
+android/app/key.properties
+**/*.jks
+**/*.keystore
+
+### iOS (ignore ephemeral and dependency outputs)
+ios/Flutter/.last_build_id
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+ios/.symlinks/
+ios/Pods/
+ios/Runner/GeneratedPluginRegistrant.*
+
+### IDEs
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+### Misc
+*.log
+.DS_Store
+pubspec.yaml.orig
+
+### Optional local env files (if you create them)
+*.env
+*.env.*
+
+### Symbolication / obfuscation (build outputs)
+app.*.symbols
+app.*.map.json
+
+### Android Studio build dirs (redundant but explicit)
+/android/app/debug
+/android/app/profile
+/android/app/release
