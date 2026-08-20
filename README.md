@@ -1,34 +1,54 @@
-![News App Logo](assets/images/blackLogo.png)
+# News Snap
 
-# Flutter News App
+<p align="center">
+  <img src="assets/images/blackLogo.png" alt="News Snap" width="120" />
+</p>
 
-A fast, minimal, and modern news reader built with Flutter and powered by NewsAPI.
+<p align="center">
+  <b>Headlines, fast.</b><br/>
+  A dark, minimal Flutter news reader powered by NewsAPI — category feeds, keyword search, and in-app article viewing.
+</p>
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-![Dart SDK](https://img.shields.io/badge/Dart-%5E3.8.1-0175C2?logo=dart&logoColor=white)
-![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Desktop-success)
-![License](https://img.shields.io/badge/License-MIT-informational)
+<p align="center">
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white" />
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-3.8-0175C2?style=flat-square&logo=dart&logoColor=white" />
+  <img alt="NewsAPI" src="https://img.shields.io/badge/NewsAPI-org-1A1A2E?style=flat-square" />
+  <img alt="Theme" src="https://img.shields.io/badge/Theme-Dark-111111?style=flat-square" />
+  <img alt="Platforms" src="https://img.shields.io/badge/Android%20%7C%20iOS%20%7C%20Web%20%7C%20Desktop-success?style=flat-square" />
+</p>
 
-## Overview
+---
 
-This app shows top headlines by category and supports full-text search across articles. It uses:
+## Why this exists
 
-- dio for HTTP
-- cached_network_image for image caching
-- webview_flutter to open full articles
-- **Custom animated UI components** for smooth user interactions
+Most news apps drown you in chrome. News Snap keeps the loop tight:
 
-Dark theme is enabled by default.
+**Pick a category → swipe through stories → open the full article in-app.**
+
+Built to show clean Flutter UI craft: custom motion widgets, cached imagery, Dio networking, and a clear services → models → screens split.
 
 ## Features
 
-- Browse top headlines by category (e.g., business, sports, tech)
-- Search news by keyword
-- Smooth image loading with caching
-- In-app article viewing (WebView)
-- **Custom animated tab selector** with smooth transitions
-- **Swipeable card stack** for interactive article browsing
-- Mobile-first with support for Android, iOS, Web, and Desktop
+| Area | What you get |
+|------|----------------|
+| Headlines | Top stories by category via NewsAPI |
+| Categories | General · Health · Sports · Business |
+| Search | Full-text keyword search across articles |
+| Reading | In-app WebView for full articles |
+| Motion UI | Custom `AnimatedTabSelector` + `SwipeableStack` |
+| Imagery | Smooth loading with `cached_network_image` |
+| Theme | Dark mode by default |
+| Platforms | Android, iOS, Web, Desktop |
+
+## User flow
+
+```text
+Launch (dark splash)
+  → Home: category tabs + swipeable news cards
+  → Tap card → WebView article
+  → Search tab → keyword query → results
+  → Drawer / settings entry points
+```
 
 ## Demo
 
@@ -37,105 +57,117 @@ Dark theme is enabled by default.
 ## Screenshots
 
 <p>
-	<img alt="Home" src="showcase/screenshot1.png" width="30%" />
-	<img alt="Categories" src="showcase/screenshot2.png" width="30%" />
-	<img alt="Article" src="showcase/screenshot3.png" width="30%" />
-  
+  <img alt="Home" src="showcase/screenshot1.png" width="30%" />
+  <img alt="Categories" src="showcase/screenshot2.png" width="30%" />
+  <img alt="Article" src="showcase/screenshot3.png" width="30%" />
 </p>
-
-## Tech Stack
-
-- Flutter 3.x, Dart (SDK ^3.8.1)
-- Packages: dio, cached_network_image, webview_flutter, url_launcher, google_fonts
 
 ## Architecture
 
-- `lib/services/` — API services (NewsAPI integration via `NewsApiService`)
-- `lib/modules/` — Data models (`ArticleModel`, `FullArticelsModel`)
-- `lib/screens/` — UI screens and views
-- `lib/widgets/` — Reusable components (e.g., animated tabs, swipeable stack)
-
-Data flow:
-
-1. `NewsApiService` fetches JSON using dio
-2. Responses are parsed into models
-3. Screens render lists/cards and open details in a WebView
-
-## Custom Widgets
-
-This project includes two powerful custom widgets that you can easily reuse in your own Flutter projects:
-
-### 🎯 AnimatedTabSelector
-
-A smooth, customizable tab selector with animated transitions between tabs.
-
-**Features:**
-- Smooth animated circle indicator
-- Fully customizable colors, sizes, and animations
-- Support for any number of tabs with icons
-- Configurable animation duration and curves
-
-**Usage:**
-```dart
-AnimatedTabSelector(
-  icons: [Icons.home, Icons.search, Icons.settings],
-  onTabSelected: (index) => print('Selected tab: $index'),
-  backgroundColor: Colors.grey,
-  circleColor: Colors.white,
-  selectedIconColor: Colors.black,
-  animationDuration: Duration(milliseconds: 300),
-)
+```text
+┌─────────────────┐     ┌──────────────────┐     ┌─────────────────────┐
+│  Screens / UI   │ ──▶ │  Services        │ ──▶ │  NewsAPI (REST)     │
+│  views + widgets│     │  NewsApiService  │     │  top-headlines /    │
+└─────────────────┘     └──────────────────┘     │  everything         │
+         │                       │               └─────────────────────┘
+         │                       ▼
+         │              ArticleModel DTOs
+         ▼
+   Custom widgets (tabs, swipe stack) + WebView
 ```
 
-### 🃏 SwipeableStack
+**Data flow**
+1. `NewsApiService` fetches JSON with Dio
+2. Responses map into `ArticleModel` / `FullArticelsModel`
+3. Builders render card stacks; taps open `WebViewScreen`
 
-An interactive card stack widget with smooth swipe animations, perfect for card-based interfaces.
+## Project structure
 
-**Features:**
-- Swipe cards left/right with gesture detection
-- Smooth throw animations with physics
-- Configurable stack offset and rotation
-- Auto-advances to next card on swipe
-- Infinite loop through card collection
-
-**Usage:**
-```dart
-SwipeableStack(
-  children: [
-    Card(child: Text('Card 1')),
-    Card(child: Text('Card 2')),
-    Card(child: Text('Card 3')),
-  ],
-  animationDuration: Duration(milliseconds: 300),
-  stackOffset: Offset(60, 25),
-  rotationAngle: 0.11,
-)
-```
-
-Both widgets are production-ready and can be extracted into your own projects by copying the files from `lib/widgets/`.
-
-## Project Structure
-
-```
+```text
 lib/
-	main.dart
-	modules/
-		article.module.dart
-	screens/
-		views/
-		widgets/
-	services/
-		news_api.service.dart
-	widgets/
-		animated_tab_selector.dart
-		swipeable_stack.dart
-assets/
-	images/
+├── main.dart                      # Dark MaterialApp bootstrap
+├── modules/
+│   └── article.module.dart        # Article · Source · response wrapper
+├── services/
+│   └── news_api.service.dart      # Category headlines + search
+├── screens/
+│   ├── views/
+│   │   ├── main_view.dart         # Shell + animated tab nav
+│   │   ├── home.view.dart         # Category tabs + feeds
+│   │   ├── search_view.dart       # Keyword search
+│   │   └── webview_screen.dart    # In-app article reader
+│   └── widgets/                   # App bar, cards, drawer, tabs
+└── widgets/
+    ├── animated_tab_selector.dart # Reusable motion tab bar
+    └── swipeable_stack.dart       # Gesture-driven card stack
+
+assets/images/                     # Logo + branding
+showcase/                          # Screenshots + demo GIF
 ```
 
+## Tech stack
+
+| Layer | Choice |
+|-------|--------|
+| Framework | Flutter · Dart `^3.8.1` |
+| Networking | `dio` → NewsAPI (`top-headlines`, `everything`) |
+| Images | `cached_network_image` |
+| Reading | `webview_flutter` · `url_launcher` |
+| Typography | `google_fonts` |
+| Branding | `flutter_native_splash` · `flutter_launcher_icons` |
+
+Full list: [`pubspec.yaml`](pubspec.yaml)
+
+## Custom widgets
+
+Reusable pieces living in `lib/widgets/` — extractable into other projects.
+
+### AnimatedTabSelector
+Smooth circular indicator over a compact icon bar. Configurable colors, sizes, duration, and curves.
+
+### SwipeableStack
+Physics-y card stack: drag, throw, rotate, advance. Configurable offset and rotation for the back card.
+
+## Getting started
+
+**Prerequisites**
+- Flutter SDK (Dart 3.8+)
+- A [NewsAPI.org](https://newsapi.org) API key
+
+```bash
+git clone https://github.com/baraa404/News-Snap.git
+cd News-Snap
+flutter pub get
+```
+
+Put your NewsAPI key in `lib/services/news_api.service.dart` (or ideally an env/`--dart-define` — don’t commit secrets to public forks).
+
+**Run**
+
+```bash
+flutter devices
+flutter run -d android   # or ios / chrome / linux / macos / windows
+```
+
+## Useful commands
+
+```bash
+flutter clean && flutter pub get
+flutter analyze
+flutter test
+```
+
+## Notes for reviewers
+
+- Package name is `news_app`; product branding is **News Snap**.
+- NewsAPI free-tier keys are meant for development; production needs a proper key + backend proxy.
+- Prefer HTTPS article URLs for iOS App Transport Security.
 
 ## Acknowledgements
 
-- News data from NewsAPI.org
-- Flutter and the Dart team
+- News data from [NewsAPI.org](https://newsapi.org)
+- Flutter & Dart teams
 
+## License
+
+MIT — portfolio / personal project.
