@@ -1,8 +1,6 @@
 # News Snap
 
-<div align="center">
-  **English** · **[العربية](README.ar.md)**
-</div>
+**English** · **[العربية](README.ar.md)**
 
 <p align="center">
   <img src="assets/images/blackLogo.png" alt="News Snap" width="120" />
